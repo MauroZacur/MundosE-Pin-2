@@ -16,8 +16,7 @@ jobs:
 
     - name: Set up Terraform
       uses: hashicorp/setup-terraform@v3
-      with:
-        terraform_version: 1.0.11 
+
 
     - name: Verify Terraform version
       run: terraform --version

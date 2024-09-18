@@ -10,4 +10,4 @@ sudo systemctl start httpd
 sudo systemctl enable httpd
 
 # Crear una página de inicio sencilla
-echo "<h1>Bienvenido a apache</h1>" | sudo tee /var/www/html/index.html
+echo "<h1>Bienvenido Juan Berella</h1>" | sudo tee /var/www/html/index.html
