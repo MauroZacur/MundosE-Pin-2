@@ -1,6 +1,8 @@
 name: Terraform Apply
 
-on: [push]
+on:
+  workflow_dispatch:
+
 
 jobs:
   terraform_apply:
