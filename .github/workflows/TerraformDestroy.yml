@@ -1,27 +1,32 @@
 name: Terraform Destroy
+
 on:
-  workflow_dispatch:
+  workflow_dispatch: # Permite iniciar el flujo manualmente desde la interfaz de GitHub Actions
 
 jobs:
   terraform_destroy:
-    runs-on: ubuntu-latest
-    env:
-      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-      AWS_REGION: ${{ secrets.AWS_REGION }}
-
+    name: "Terraform Destroy - Grupo 13" # Nombre del trabajo que aparece en la interfaz de GitHub Actions
+    runs-on: ubuntu-latest # Define el sistema operativo en el que se ejecutará el trabajo
+    
     steps:
-    - name: Check out the repo
-      uses: actions/checkout@v3
+      - name: Checkout
+        uses: actions/checkout@v2 # Accion de GitHub para clonar el repositorio en el entorno virtual
 
-    - name: Set up Terraform
-      uses: hashicorp/setup-terraform@v1
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v1 # Utiliza la acción oficial de HashiCorp para instalar Terraform en el entorno de ejecución.
 
-    - name: Terraform Init
-      run: terraform init
+      - name: Terraform Init
+        id: init
+        run: terraform init # Ejecuta el comando `terraform init`, que inicializa el backend y descarga los proveedores necesarios.
+        env:
+            AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+            AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+            AWS_REGION: ${{ secrets.AWS_REGION }}
 
-    - name: Terraform Plan (Destroy)
-      run: terraform plan -destroy -out=tfplan
-
-    - name: Terraform Apply (Destroy)
-      run: terraform apply -auto-approve tfplan
+      - name: Terraform Destroy
+        id: destroy
+        run: terraform destroy -auto-approve # Ejecuta el comando `terraform destroy` con el flag `-auto-approve`, lo que elimina los recursos sin solicitar confirmación manual.
+        env:
+            AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+            AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+            AWS_REGION: ${{ secrets.AWS_REGION }}
