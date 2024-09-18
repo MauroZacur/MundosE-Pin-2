@@ -2,7 +2,6 @@ name: Terraform Apply
 on:
   workflow_dispatch:
 
-
 jobs:
   terraform_apply:
     runs-on: ubuntu-latest
