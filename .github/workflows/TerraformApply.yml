@@ -5,24 +5,28 @@ on: [push]
 jobs:
   terraform_apply:
     runs-on: ubuntu-latest
+    env:
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      AWS_REGION: ${{ secrets.AWS_REGION }}
+
     steps:
-    - uses: actions/checkout@v3
-    - uses: hashicorp/setup-terraform@v3
-    
+    - name: Check out the repository
+      uses: actions/checkout@v3
+
+    - name: Set up Terraform
+      uses: hashicorp/setup-terraform@v3
+      with:
+        terraform_version: 1.0.11 
+
     - name: Verify Terraform version
       run: terraform --version
 
-    - name: Terraform init
-      env:
-        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-      run: terraform init -input=false
+    - name: Terraform Init
+      run: terraform init
 
-    - name: Terraform validation
+    - name: Terraform Validation
       run: terraform validate
 
-    - name: Terraform apply
-      env:
-        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-      run: terraform apply -auto-approve -input=false
+    - name: Terraform Apply
+      run: terraform apply -auto-approve
